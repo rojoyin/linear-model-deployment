@@ -7,7 +7,7 @@ import logging
 app = Flask(__name__)
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("Model app")
+logger = logging.getLogger("ModelDeployment")
 
 model = pickle.load(open("model/model.pkl", "rb"))
 
@@ -37,6 +37,7 @@ def regenerate_train_model():
 def predict():
     body = request.json
     if "Rooms" not in list(body.keys()) or "Distance" not in list(body.keys()):
+        logger.error("Incorrect parameters in the body")
         return "Bad request, include 'Rooms' or 'Distance'", 400
 
     rooms = body["Rooms"]
